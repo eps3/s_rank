@@ -1,0 +1,22 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET         /                                    controllers.HomeController.index
+POST        /api/register                        controllers.UserController.register
+POST        /api/login                           controllers.UserController.login
+GET         /api/logout                          controllers.UserController.logout
+
+# topic
+GET         /api/topic                           controllers.TopicController.topic(page: Int ?= 0,size: Int ?= 10)
+POST        /api/topic                           controllers.TopicController.add
+GET         /api/topic/follow                    controllers.TopicController.followTopic
+GET         /api/topic/:topic_id/follow          controllers.TopicController.follow(topic_id: Long)
+GET         /api/topic/:topic_id/unFollow        controllers.TopicController.unFollow(topic_id: Long)
+
+#card
+GET         /api/card                            controllers.CardController.list(page: Int ?= 0,size: Int ?= 10)
+POST        /api/card                            controllers.CardController.card
+
+
+
