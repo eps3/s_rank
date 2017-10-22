@@ -15,7 +15,8 @@ export default {
     },
 
     isLogin() {
-        if (this.getJwtData() != null) {
+        var jwtDate = this.getJwtData()
+        if (jwtDate !== null && jwtDate.data !== null && jwtDate.data.username !== null) {
             return true
         } else {
             return false
@@ -26,11 +27,13 @@ export default {
         if (!this.isLogin) {
             return false
         } else {
-            if (this.getJwtData().data.role === "ADMIN") {
+            var jwtDate = this.getJwtData()
+            if (jwtDate !== null && jwtDate.data !==null && jwtDate.data.role === "ADMIN") {
                 return true
-            } else{
+            } else {
                 return false
             }
+            
         }
     },
 

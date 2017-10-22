@@ -44,24 +44,23 @@
 import { Base64 } from 'js-base64';
 import api from '../api'
 
-var jwtData = api.getJwtData()
-var user = {
-  username: ""
-}
-if (jwtData != null) {
-  user.username = api.getJwtData().data.username
-}
-
 export default {
   name: "rightCard",
   data() {
     return {
       loginFlag: api.isLogin(),
-      user: user
+      user: {
+        username: ""
+      }
     };
   },
   methods: {
     getLogout: api.logout
+  },
+  mounted() {
+    if (this.loginFlag) {
+      this.user.username = api.getJwtData().data.username
+    }
   }
 };
 </script>

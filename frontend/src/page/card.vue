@@ -102,7 +102,7 @@ export default {
                   message: "打卡成功！",
                   type: "success"
                 });
-                this.$router.push("/")
+                this.$router.push("/");
               }
             })
             .catch(function(error) {
@@ -118,7 +118,9 @@ export default {
     }
   },
   mounted() {
-    this.followList();
+    if (api.isLogin()) {
+      this.followList();
+    }
   }
 };
 </script>

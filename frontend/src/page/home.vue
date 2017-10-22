@@ -25,6 +25,7 @@
 <script>
 import headMenu from "../components/headMenu";
 import rightCard from "../components/rightCard";
+import { Message } from "element-ui";
 import api from "../api";
 
 export default {
