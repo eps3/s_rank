@@ -3,6 +3,22 @@
     <head-menu></head-menu>
     <el-row :gutter="20" type="flex">
       <el-col :span="18">
+        <br/>
+        <br/>
+        <el-row class="flex">
+          <el-col :span="20">
+            <el-pagination
+              @current-change="getTopicList"
+              :current-page.sync="currentPage"
+              :page-size="10"
+              layout="total, prev, pager, next"
+              :total="totalTopic">
+            </el-pagination>
+          </el-col>
+          <el-col :span="4">
+            <el-input @change="getTopicList" v-model="search" placeholder="搜索" icon="search" style="float: right;"></el-input>
+          </el-col>
+        </el-row>
         <div v-for="item in topicList">
           <br/>
           <el-card class="box-card">
@@ -36,7 +52,10 @@ export default {
   name: "Topic",
   data() {
     return {
-      topicList: []
+      currentPage: 1,
+      topicList: [],
+      search: "",
+      totalTopic: 0
     };
   },
   components: {
@@ -46,7 +65,7 @@ export default {
   methods: {
     getTopicList() {
       api
-        .getTopicList()
+        .getTopicList(this.currentPage-1, 10, this.search)
         .then(response => {
           var status = response.data.status;
           if (status.status_code != 0) {
@@ -55,7 +74,8 @@ export default {
               type: "error"
             });
           } else {
-            this.topicList = response.data.result;
+            this.topicList = response.data.result.items;
+            this.totalTopic = response.data.result.total;
           }
         })
         .catch(function(error) {
@@ -81,7 +101,7 @@ export default {
                 message: "关注成功!",
                 type: "success"
               });
-              this.getTopicList()
+              this.getTopicList();
             }
           })
           .catch(function(error) {
@@ -110,7 +130,7 @@ export default {
                 message: "取消成功!",
                 type: "success"
               });
-              this.getTopicList()
+              this.getTopicList();
             }
           })
           .catch(function(error) {

@@ -8,7 +8,7 @@ POST        /api/login                           controllers.UserController.logi
 GET         /api/logout                          controllers.UserController.logout
 
 # topic
-GET         /api/topic                           controllers.TopicController.topic(page: Int ?= 0,size: Int ?= 10)
+GET         /api/topic                           controllers.TopicController.topic(filter: String ?= "", page: Int ?= 0,size: Int ?= 10)
 POST        /api/topic                           controllers.TopicController.add
 GET         /api/topic/follow                    controllers.TopicController.followTopic
 GET         /api/topic/:topic_id/follow          controllers.TopicController.follow(topic_id: Long)

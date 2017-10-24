@@ -98,7 +98,7 @@ class TopicRepository @Inject()(dBApi: DBApi)(implicit ec: DatabaseExecutionCont
            t.c_user_id, t.c_update_time, t.c_create_time FROM $TABLE_NAME as t
            left JOIN t_follow as f on
            f.c_user_id={user_id} and
-           f.c_topic_id=t.c_id and
+           f.c_topic_id=t.c_id where
            t.c_name like {filter}
            limit {pageSize} offset {offset}
          """
@@ -108,6 +108,14 @@ class TopicRepository @Inject()(dBApi: DBApi)(implicit ec: DatabaseExecutionCont
         'user_id -> user_id,
         'filter -> filter
       ).as(topicWithFollow *)
+    }
+  }
+
+  def totalCount(filter: String = "%") = Future {
+    db.withConnection { implicit connection =>
+      SQL(s"SELECT COUNT(*) FROM $TABLE_NAME WHERE c_name like {filter}").on(
+        'filter -> filter
+      ).as(SqlParser.scalar[Long].singleOpt).get
     }
   }
 

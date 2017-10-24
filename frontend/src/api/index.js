@@ -61,8 +61,14 @@ export default {
     },
 
     // topic
-    getTopicList() {
-        return axios.get("/api/topic")
+    getTopicList(toPage,pageSize,search) {
+        return axios.get("/api/topic", {
+            params: {
+                page: toPage,
+                size: pageSize,
+                filter: search
+            } 
+        })
     },
 
     getFollowList() {
