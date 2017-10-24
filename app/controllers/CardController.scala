@@ -45,8 +45,8 @@ class CardController @Inject()(cc: ControllerComponents, cardService: CardServic
     }
   }
 
-  def list(page: Int, size: Int): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    cardService.list(page, size).map { s =>
+  def list(filter: String, page: Int, size: Int): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+    cardService.list(page, size, s"%$filter%").map { s =>
       Ok(JsonUtil.returnMsg(Json.toJson(s)))
     }
   }

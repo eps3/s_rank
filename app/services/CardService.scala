@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import exceptions.KnownSystemException
 import models.{Card, CardRepository, TopicRepository}
-import utils.DateUtil
+import utils.{DateUtil, Page}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -17,11 +17,13 @@ import scala.language.postfixOps
 class CardService @Inject()(cardRepository: CardRepository, topicRepository: TopicRepository) {
 
   def list(page: Int = 0, pageSize: Int = 10, filter: String = "%") = {
-    if (pageSize > 20) {
-      cardRepository.list(page, 10, filter)
-    } else {
-      cardRepository.list(page, pageSize, filter)
-    }
+    val pageSizeReal = if (pageSize > 20) 20 else pageSize
+    val countFuture = cardRepository.totalCount(filter)
+
+    val listFuture = cardRepository.list(page, pageSize, filter)
+    for {count <- countFuture
+         result <- listFuture
+    } yield Page(result, page, pageSizeReal, count)
   }
 
   def save(topic_id: Long, user_id: Long, content: String): Future[Int] = {

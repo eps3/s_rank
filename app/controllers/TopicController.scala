@@ -24,7 +24,6 @@ class TopicController @Inject()(cc: ControllerComponents, topicService: TopicSer
     ) tupled
 
   def topic(filter: String, page: Int, size: Int): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    Logger.info(s"$filter - $page - $size")
     request.session.get("id") match {
       case Some(user_id) =>
         topicService.listWithUser(user_id.toLong, page, size, s"%$filter%").map { s =>

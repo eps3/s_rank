@@ -3,6 +3,22 @@
     <head-menu></head-menu>
     <el-row :gutter="20" type="flex">
       <el-col :span="18">
+        <br/>
+        <br/>
+        <el-row class="flex">
+          <el-col :span="20">
+            <el-pagination
+              @current-change="getCardList"
+              :current-page.sync="currentPage"
+              :page-size="10"
+              layout="total, prev, pager, next"
+              :total="totalCard">
+            </el-pagination>
+          </el-col>
+          <el-col :span="4">
+            <el-input @change="getCardList" v-model="search" placeholder="搜索" icon="search" style="float: right;"></el-input>
+          </el-col>
+        </el-row>
         <div v-for="item in cardList">
           <br/>
           <el-card class="box-card">
@@ -32,7 +48,10 @@ export default {
   name: "Home",
   data() {
     return {
-      cardList: []
+      currentPage: 1,
+      cardList: [],
+      search: "",
+      totalCard: 0
     };
   },
   components: {
@@ -42,7 +61,7 @@ export default {
   methods: {
     getCardList() {
       api
-        .getCardList()
+        .getCardList(this.currentPage-1, 10, this.search)
         .then(response => {
           var status = response.data.status;
           if (status.status_code != 0) {
@@ -51,7 +70,8 @@ export default {
               type: "error"
             });
           } else {
-            this.cardList = response.data.result;
+            this.cardList = response.data.result.items;
+            this.totalCard = response.data.result.total;
           }
         })
         .catch(function(error) {

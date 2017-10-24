@@ -1,6 +1,6 @@
 package utils
 
-import models.{Card, Topic, TopicWithFollow}
+import models.{Card, CardWithUser, Topic, TopicWithFollow}
 import play.api.libs.json.Json
 
 /**
@@ -11,4 +11,5 @@ object Page {
   implicit val topicFormat = Json.format[Page[Topic]]
   implicit val CardFormat = Json.format[Page[Card]]
   implicit val topicWithFollowFormat = Json.format[Page[TopicWithFollow]]
+  implicit val cardWithUserFormat = Json.format[Page[CardWithUser]]
 }

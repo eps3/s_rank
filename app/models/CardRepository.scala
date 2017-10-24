@@ -4,7 +4,7 @@ import java.util.Date
 import javax.inject.{Inject, Singleton}
 
 import anorm.SqlParser.get
-import anorm.{SQL, ~}
+import anorm.{SQL, SqlParser, ~}
 import play.api.db.DBApi
 import play.api.libs.json.Json
 
@@ -98,7 +98,7 @@ class CardRepository @Inject()(dBApi: DBApi)(implicit ec: DatabaseExecutionConte
            SELECT c.c_id, t.c_name as c_topic_name, u.c_name as c_user_name, c.c_content, c.c_update_time, c.c_create_time FROM $TABLE_NAME as c
            left join t_user as u on c.c_user_id = u.c_id
            left join t_topic as t on t.c_id = c.c_topic_id
-           and c.c_content like {filter} order by c.c_create_time desc
+           where c.c_content like {filter} order by c.c_create_time desc
            limit {pageSize} offset {offset}
          """
       ).on(
@@ -106,6 +106,14 @@ class CardRepository @Inject()(dBApi: DBApi)(implicit ec: DatabaseExecutionConte
         'offset -> offset,
         'filter -> filter
       ).as(cardWithName *)
+    }
+  }
+
+  def totalCount(filter: String = "%") = Future {
+    db.withConnection { implicit connection =>
+      SQL(s"SELECT COUNT(*) FROM $TABLE_NAME WHERE c_content like {filter}").on(
+        'filter -> filter
+      ).as(SqlParser.scalar[Long].singleOpt).get
     }
   }
 

@@ -15,7 +15,7 @@ GET         /api/topic/:topic_id/follow          controllers.TopicController.fol
 GET         /api/topic/:topic_id/unFollow        controllers.TopicController.unFollow(topic_id: Long)
 
 #card
-GET         /api/card                            controllers.CardController.list(page: Int ?= 0,size: Int ?= 10)
+GET         /api/card                            controllers.CardController.list(filter: String ?= "", page: Int ?= 0,size: Int ?= 10)
 POST        /api/card                            controllers.CardController.card
 
 

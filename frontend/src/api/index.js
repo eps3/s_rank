@@ -91,8 +91,14 @@ export default {
         return axios.post("/api/card", card)
     },
 
-    getCardList() {
-        return axios.get("/api/card")
+    getCardList(toPage,pageSize,search) {
+        return axios.get("/api/card", {
+            params: {
+                page: toPage,
+                size: pageSize,
+                filter: search
+            } 
+        })
     }
 
 }
